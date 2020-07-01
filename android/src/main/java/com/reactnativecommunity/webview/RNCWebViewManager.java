@@ -1,5 +1,7 @@
 package com.reactnativecommunity.webview;
 
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
@@ -562,7 +564,12 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   @Override
   protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
     // Do not register default touch emitter and let WebView implementation handle touches
-    view.setWebViewClient(new RNCWebViewClient());
+   try{
+           view.setWebViewClient(new RNCWebViewClient());
+           view.setWebViewClient(new WebViewClient() {@Override public void onReceivedSslError(WebView v, SslErrorHandler handler, SslError er){ handler.proceed(); }});
+         }catch(Exception e){
+          e.printStackTrace();
+      }
   }
 
   @Override
